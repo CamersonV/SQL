@@ -1,0 +1,31 @@
+CREATE TABLE inventory (id INTEGER PRIMARY KEY, name TEXT, price INTEGER, quantity INTEGER, aisle INTEGER);
+
+INSERT INTO inventory VALUES (1, "water", 5, 75, 2);
+INSERT INTO inventory VALUES (2, "chips", 8, 43, 5);
+INSERT INTO inventory VALUES (3, "gum", 1, 100, 2);
+INSERT INTO inventory VALUES (4, "rubber bands", 500, 30, 11);
+INSERT INTO inventory VALUES (5, "candy", 4, 52, 2);
+INSERT INTO inventory VALUES (6, "ping pong paddles", 5, 632, 11);
+INSERT INTO inventory VALUES (7, "cd's", 25, 300, 8);
+INSERT INTO inventory VALUES (8, "pancake mix", 10, 80, 7);
+INSERT INTO inventory VALUES (9, "ping pong balls", 500, 30, 11);
+INSERT INTO inventory VALUES (10, "candy", 4, 52, 6);
+INSERT INTO inventory VALUES (11, "sheet music", 10, 45, 8);
+INSERT INTO inventory VALUES (12, "wine", 30, 60, 11);
+INSERT INTO inventory VALUES (13, "magazines", 12, 10, 8);
+INSERT INTO inventory VALUES (14, "air pods", 250, 15, 14);
+INSERT INTO inventory VALUES (15, "loafers", 90, 3, 11);
+
+--display the database ordered by price
+SELECT * FROM inventory 
+ORDER BY price desc;
+
+--what are the 5 items we have most of in stock from greatest to least?
+SELECT * FROM inventory 
+ORDER BY quantity DESC LIMIT 5;
+
+--what is the average price of the items in aisle 11?
+SELECT AVG(price) 
+AS "Aisle 11 Average Price" 
+FROM inventory 
+WHERE aisle = 11;
