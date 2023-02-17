@@ -73,7 +73,7 @@ SELECT track_name, AVG(duration_ms)
 FROM BIT_DB.spotifydata  
 GROUP BY track_name  
 ORDER BY popularity DESC  
-LIMIT 5;  
+LIMIT 10;  
 
 #After quantifying the average loudness, danceability, and duration of the 10 most popular songs, I then wanted to see
 #what the popularity of the song with the most acousticness was.
