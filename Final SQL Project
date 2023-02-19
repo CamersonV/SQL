@@ -1,0 +1,86 @@
+#In this SQL code, I'm querying a daqtabase named chinook, which represents a digital media store and includes tables for artists, albums, media tracks, invoices, and customers.
+#Listed below are examples of the SQL code I used to query the data based on the requested information. 
+
+-- Show Customers (their full names, customer ID, and country) who are not in the US. --
+
+SELECT CustomerID, FirstName, LastName, Country FROM chinook.customers WHERE country <> "USA";  
+
+-- Show only the Customers from Brazil. --
+
+SELECT * FROM chinook.customers WHERE country = 'Brazil'; 
+
+--Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.-- 
+
+SELECT invoiceid, firstname, lastname, invoicedate, billingcountry FROM chinook.invoices 
+JOIN customers ON invoices.CustomerID = customers.customerid  
+WHERE country = 'Brazil';  
+
+-- Show the Employees who are Sales Agents. --
+
+SELECT * FROM chinook.employees 
+WHERE title = 'Sales Support Agent'; 
+
+-- Find a unique/distinct list of billing countries from the Invoice table. --
+
+SELECT DISTINCT BillingCountry FROM chinook.invoices; 
+
+-- Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name. --
+
+SELECT employees.Firstname, employees.Lastname, invoices.InvoiceId  
+FROM chinook.Employees  
+JOIN chinook.customers ON employees.EmployeeID=customers.SupportRepID 
+JOIN chinook.invoices ON customers.CustomerID = invoices.CustomerID 
+WHERE title = 'Sales Support Agent'; 
+
+-- Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers. --
+
+SELECT invoices.total, customers.FirstName, customers.lastname, customers.country, employees.firstname, employees.lastname 
+FROM chinook.employees  
+JOIN chinook.customers ON employees.EmployeeID=customers.SupportRepID  
+JOIN chinook.invoices ON customers.CustomerID = invoices.CustomerID  
+WHERE title = "Sales Support Agent";  
+
+-- How many Invoices were there in 2009? --
+
+SELECT COUNT(*) FROM invoices WHERE InvoiceDate LIKE '2009%'; 
+
+-- What are the total sales for 2009? --
+
+SELECT SUM(total) FROM chinook.invoices WHERE InvoiceDate LIKE '2009%';  
+
+-- Write a query that includes the purchased track name with each invoice line ID. --
+
+SELECT tracks.name, invoice_items.invoicelineid FROM chinook.Invoice_Items 
+JOIN chinook.tracks ON invoice_items.TrackId = tracks.TrackID;  
+ 
+-- Write a query that includes the purchased track name AND artist name with each invoice line ID. --
+
+SELECT tracks.name, tracks.composer, inv.invoicelineid FROM chinook.tracks  
+JOIN chinook.invoice_items inv ON tracks.trackid=inv.trackid;  
+
+-- Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre. --
+
+SELECT tracks.Track_Name, albums.title AS Album_Name, med.name AS Media_Type, gen.name AS Genre FROM chinook.tracks  
+JOIN chinook.albums ON tracks.albumid=albums.albumid  
+JOIN chinook.media_types med ON tracks.mediatypeid=med.mediatypeid  
+JOIN chinook.genres gen ON tracks.genreid=gen.genreid;  
+ 
+-- Show the total sales made by each sales agent. --
+
+SELECT emp.firstname, emp.lastname, ROUND(SUM(inv.total), 2) AS Sales FROM employees emp 
+JOIN chinook.customers cust ON emp.EmployeeID=cust.SupportRepID  
+JOIN chinook.invoices inv ON cust.CustomerID = inv.CustomerID  
+WHERE title = "Sales Support Agent" 
+GROUP BY emp.firstname  
+ORDER BY Sales DESC; 
+
+-- Which sales agent made the most dollars in sales in 2009? --
+
+SELECT emp.firstname, emp.lastname, ROUND(SUM(inv.total), 2) AS Sales FROM employees emp 
+JOIN chinook.customers cust ON emp.EmployeeID=cust.SupportRepID  
+JOIN chinook.invoices inv ON cust.CustomerID = inv.CustomerID  
+WHERE title = "Sales Support Agent" AND invoicedate LIKE '2009%'  
+GROUP BY emp.firstname  
+ORDER BY Sales DESC LIMIT 1;  
+
+ 
